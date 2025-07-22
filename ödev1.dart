@@ -1,3 +1,5 @@
+import 'dart:async';
+
 class Category {
   final int id;
   final String name;
@@ -55,6 +57,8 @@ class User {
     print(
         "Transfer başarılı: $amount ₺, ${fromWallet.category.name} -> ${toWallet.category.name}");
   }
+
+  
 }
 
 void main() {
@@ -76,5 +80,11 @@ void main() {
   print("Toplam Cüzdan Sayısı: ${user.getWalletCount()}");
   print("Toplam Bakiye: ${user.getTotalBalance()} ₺");
 
-  user.transfer(wallet1, wallet2, 300);
+  try {
+    user.transfer(wallet1, wallet2, 300);
+  } catch (e) {
+    print("Transfer hatası: $e");
+  }
+
+  
 }
