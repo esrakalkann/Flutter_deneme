@@ -2,20 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
+
+
+
 void main(List<String> args){
 
   final model= CarModel(category: Carmodels.bmw, name: 'bmw x5', money: 14234);
 
-final carItems = [
-
-CarModel(category: Carmodels.bmw, name: 'bmwx5', money: 12,isSecondHand: false),
-CarModel(category: Carmodels.toyota, name: 'toyota', money: 34),
-CarModel(category: Carmodels.bmw, name: 'yamaha', money: 45),
-CarModel(category: Carmodels.toyota, name: 'bmwsls', money: 34566, isSecondHand: false),
-CarModel(category: Carmodels.bmw, name: 'toyota05', money: 3564),
-CarModel(category: Carmodels.bmw, name: 'bmw x5', money: 3564),
-
-];
 
 
 final isHaveCar= carItems.contains(newCar);
@@ -45,12 +38,22 @@ return element.category == Carmodels.bmw && element.money > 20;
 
 */
 
+
 final resultBmwMorethan20 = carItems.where((element){
 
   return element.category==Carmodels.bmw && element.money > 20;
 });
 
+final carItems = [
 
+CarModel(category: Carmodels.bmw, name: 'bmwx5', money: 12,isSecondHand: false),
+CarModel(category: Carmodels.toyota, name: 'toyota', money: 34),
+CarModel(category: Carmodels.bmw, name: 'yamaha', money: 45),
+CarModel(category: Carmodels.toyota, name: 'bmwsls', money: 34566, isSecondHand: false),
+CarModel(category: Carmodels.bmw, name: 'toyota05', money: 3564),
+CarModel(category: Carmodels.bmw, name: 'bmw x5', money: 3564),
+
+];
 
 class CarModel {
    Carmodels category;
