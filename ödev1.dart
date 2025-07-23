@@ -5,6 +5,12 @@ class Category {
   final String name;
 
   Category(this.name, this.id);
+
+
+
+
+
+  
 }
 
 class Wallet {
@@ -29,6 +35,93 @@ class Wallet {
     print("${category.name} cüzdanından $amount para çekildi.");
     print("yeni bakiye $balance");
   }
+}
+
+void CategoryBalances(List<Wallet> wallets) {
+    final Map<int, double> categoryTotals = {};
+    final Map<int, String> categoryNames = {};
+
+    for (var wallet in wallets) {
+      final id = wallet.category.id;
+      final name = wallet.category.name;
+      final balance = wallet.balance;
+
+      categoryTotals.update(
+        id,
+        (existing) => existing + balance,
+        ifAbsent: () => balance,
+      );
+
+      /*
+
+      putIfAbsent methodu
+        Returns the value associated to key, if there is one.
+         Otherwise calls ifAbsent to get a new value, associates key to that value, and then returns the new value.
+
+        That is, if the key is currently in the map, map.putIfAbsent(key, ifAbsent) is equivalent to map[key]. 
+        If the key is not currently in the map, it's instead equivalent to map[key] = ifAbsent()
+         (but without any guarantee that the [] and []= operators are actually called to achieve that effect).
+
+
+      */
+      categoryNames.putIfAbsent(id, () => name);
+    }
+
+    for (final entry in categoryTotals.entries) {
+      final name = categoryNames[entry.key]!;
+      print("Kategori: $name → Toplam: ${entry.value} ₺");
+    }
+  }
+
+  void HighestWallet(List<Wallet> wallets){
+
+
+    Wallet highest = wallets.first;
+
+  for (var wallet in wallets) {
+    if (wallet.balance > highest.balance) {
+      highest = wallet;
+    }
+  }
+
+  print(
+    "En yüksek bakiyeye sahip cüzdan: ${highest.balance} ₺ (${highest.category.name})",
+  );
+
+
+  }
+
+  void WalletByCategorySorted(List<Wallet> wallets, Category category){
+    final filtered = wallets
+      .where((wallet)=> wallet.category==category)
+      .toList()
+      ..sort((a, b) => a.balance.compareTo(b.balance));
+
+      final total = filtered.fold(0.0, (sum, wallet) => sum + wallet.balance);
+
+    print("Kategori: ${category.name} - Cüzdanlar:");
+  for (var wallet in filtered) {
+    print("- ${wallet.balance} ₺");
+  }
+  print("Toplam bakiye: $total");
+
+
+  }
+
+    void addCategory(String name, int id, List<Category>categories){
+final exists= categories.any((category)=> category.id==id|| category.name == name);
+if (exists){
+
+  print("Kategori mevcut");
+
+}else{
+categories.add(Category(name,id));
+print("Kategori eklendi: $name");
+
+}
+
+
+
 }
 
 class User {
@@ -57,9 +150,9 @@ class User {
     print(
         "Transfer başarılı: $amount ₺, ${fromWallet.category.name} -> ${toWallet.category.name}");
   }
-
-  
 }
+
+
 
 void main() {
   final cash = Category("Nakit", 1);
@@ -85,6 +178,20 @@ void main() {
   } catch (e) {
     print("Transfer hatası: $e");
   }
+  final wallets = [wallet1, wallet2, wallet3, wallet4];
+  CategoryBalances(wallets);
+  HighestWallet(wallets);
+  WalletByCategorySorted(wallets, cash);
 
-  
+  //addCategory("Tatil", 4, categories);
+
+  addCategory("Tatil",5,categories);
+   print("\nEklenen kategoriler:");
+  for (var category in categories) {
+    print("ID: ${category.id}, Name: ${category.name}");
+  }
+
+  print("Toplam Cüzdan Sayısı: ${user.getWalletCount()}");
+
 }
+final List<Category> categories = [];
