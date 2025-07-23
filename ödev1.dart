@@ -5,12 +5,6 @@ class Category {
   final String name;
 
   Category(this.name, this.id);
-
-
-
-
-
-  
 }
 
 class Wallet {
@@ -38,21 +32,21 @@ class Wallet {
 }
 
 void CategoryBalances(List<Wallet> wallets) {
-    final Map<int, double> categoryTotals = {};
-    final Map<int, String> categoryNames = {};
+  final Map<int, double> categoryTotals = {};
+  final Map<int, String> categoryNames = {};
 
-    for (var wallet in wallets) {
-      final id = wallet.category.id;
-      final name = wallet.category.name;
-      final balance = wallet.balance;
+  for (var wallet in wallets) {
+    final id = wallet.category.id;
+    final name = wallet.category.name;
+    final balance = wallet.balance;
 
-      categoryTotals.update(
-        id,
-        (existing) => existing + balance,
-        ifAbsent: () => balance,
-      );
+    categoryTotals.update(
+      id,
+      (existing) => existing + balance,
+      ifAbsent: () => balance,
+    );
 
-      /*
+    /*
 
       putIfAbsent methodu
         Returns the value associated to key, if there is one.
@@ -64,19 +58,17 @@ void CategoryBalances(List<Wallet> wallets) {
 
 
       */
-      categoryNames.putIfAbsent(id, () => name);
-    }
-
-    for (final entry in categoryTotals.entries) {
-      final name = categoryNames[entry.key]!;
-      print("Kategori: $name → Toplam: ${entry.value} ₺");
-    }
+    categoryNames.putIfAbsent(id, () => name);
   }
 
-  void HighestWallet(List<Wallet> wallets){
+  for (final entry in categoryTotals.entries) {
+    final name = categoryNames[entry.key]!;
+    print("Kategori: $name → Toplam: ${entry.value} ₺");
+  }
+}
 
-
-    Wallet highest = wallets.first;
+void HighestWallet(List<Wallet> wallets) {
+  Wallet highest = wallets.first;
 
   for (var wallet in wallets) {
     if (wallet.balance > highest.balance) {
@@ -87,42 +79,43 @@ void CategoryBalances(List<Wallet> wallets) {
   print(
     "En yüksek bakiyeye sahip cüzdan: ${highest.balance} ₺ (${highest.category.name})",
   );
+}
 
-
-  }
-
-  void WalletByCategorySorted(List<Wallet> wallets, Category category){
-    final filtered = wallets
-      .where((wallet)=> wallet.category==category)
+void WalletByCategorySorted(List<Wallet> wallets, Category category) {
+  final filtered = wallets
+      .where((wallet) => wallet.category == category)
       .toList()
-      ..sort((a, b) => a.balance.compareTo(b.balance));
+    ..sort((a, b) => a.balance.compareTo(b.balance));
 
-      final total = filtered.fold(0.0, (sum, wallet) => sum + wallet.balance);
+  final total = filtered.fold(0.0, (sum, wallet) => sum + wallet.balance);
 
-    print("Kategori: ${category.name} - Cüzdanlar:");
+  print("Kategori: ${category.name} - Cüzdanlar:");
   for (var wallet in filtered) {
     print("- ${wallet.balance} ₺");
   }
   print("Toplam bakiye: $total");
+}
 
+void addCategory(String name, int id, List<Category> categories, User user) {
+  final exists =
+      categories.any((category) => category.id == id || category.name == name);
 
+  if (exists) {
+    print("Kategori mevcut");
+  } else {
+    final newCategory = Category(name, id);
+    categories.add(newCategory);
+
+    final newWallet = Wallet(balance: 0.0, category: newCategory);
+    user.wallets.add(newWallet);
+
+    print("Kategori eklendi: $name");
+    final count = getWalletCount(user.wallets);
+    print("Toplam cüzdan sayısı: $count");
   }
-
-    void addCategory(String name, int id, List<Category>categories){
-final exists= categories.any((category)=> category.id==id|| category.name == name);
-if (exists){
-
-  print("Kategori mevcut");
-
-}else{
-categories.add(Category(name,id));
-print("Kategori eklendi: $name");
-
 }
 
-
-
-}
+int getWalletCount(List<Wallet> wallets) => wallets.length;
 
 class User {
   final String name;
@@ -151,8 +144,6 @@ class User {
         "Transfer başarılı: $amount ₺, ${fromWallet.category.name} -> ${toWallet.category.name}");
   }
 }
-
-
 
 void main() {
   final cash = Category("Nakit", 1);
@@ -185,13 +176,13 @@ void main() {
 
   //addCategory("Tatil", 4, categories);
 
-  addCategory("Tatil",5,categories);
-   print("\nEklenen kategoriler:");
+  addCategory("Tatil", 5, categories, user);
+  print("\nEklenen kategoriler:");
   for (var category in categories) {
     print("ID: ${category.id}, Name: ${category.name}");
   }
 
   print("Toplam Cüzdan Sayısı: ${user.getWalletCount()}");
-
 }
+
 final List<Category> categories = [];
